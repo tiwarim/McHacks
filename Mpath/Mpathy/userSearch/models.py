@@ -1,10 +1,15 @@
 from django.db import models
 
 # Create your models here.
-class users(models.Model):
-      userName = models.CharField(max_length=120)
-      description = models.TextField()
-      boolTest = models.BooleanField(default=False)
+#   need to be moved
+class User_Account(models.Model):
+    user_name = models.CharField(max_length=200)
+    pass_wd = models.CharField(max_length=50)
+    email = models.EmailField()
+    description = models.TextField()
+    create_date = models.DateField()
 
-      def _str_(self):
-        return self.title
+class User_Target():
+    user = models.ForeignKey(User_Account, on_delete=models.CASCADE)
+    social_media = models.CharField(max_length=200, default='twitter')
+    social_media_id = models.CharField(max_length=200)
