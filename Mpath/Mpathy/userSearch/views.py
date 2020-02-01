@@ -11,6 +11,7 @@ import os
 def userSearch(request):
     try:
         url_status = urllib.request.urlopen(request.body.decode("utf-8") ).getcode()
+        print(url_status)
     except:
         return HttpResponse(":( Url is Not Working")
     if (url_status == 200):

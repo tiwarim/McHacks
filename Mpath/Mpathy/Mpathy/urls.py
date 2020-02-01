@@ -20,6 +20,6 @@ from django.conf.urls import url
 from userSearch.views import userSearch, FrontendAppView
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('url_checker', userSearch),
+    path('index', userSearch),
     url(r'^', FrontendAppView.as_view())
 ]
