@@ -21,5 +21,5 @@ from userSearch.views import userSearch, FrontendAppView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index', userSearch),
-    url(r'^', FrontendAppView.as_view())
+    path('search/', FrontendAppView.as_view())
 ]

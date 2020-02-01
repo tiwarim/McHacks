@@ -9,6 +9,9 @@ class User_Account(models.Model):
     description = models.TextField()
     create_date = models.DateField()
 
+    def __str__(self):
+        return self.user_name
+
 class User_Target():
     user = models.ForeignKey(User_Account, on_delete=models.CASCADE)
     social_media = models.CharField(max_length=200, default='twitter')
