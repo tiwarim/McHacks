@@ -3,6 +3,14 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from  rest_framework.views import APIView
+
+from .models import User_Account, Supervisee
+
 import logging
 import urllib.request
 import os
@@ -18,14 +26,27 @@ def userSearch(request):
         return HttpResponse("Yey! URL is Working")
     return HttpResponse(":( Url is Not Working")
 
-
 class FrontendAppView(View):
     """
     Serves the compiled frontend entry point (only works if you have run `yarn/npm
     run build`).
     """
-    def get(self, request):
-            print (os.path.join(settings.REACT_APP_DIR, 'build', 'index.html'))
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
+
+    def search_twitter(self, request, matching_pattern:str):
+        query_result = User_Account.objects.filter(user_name=matching_pattern)
+        context = {
+            'query result': query_result
+        }
+        return render(request, 'frontend/public/index.html', context)
+
+    def get(self, request, format=None):
+            # content = {
+            #     'user': str(request.user), #django.contrib.auth.user instance
+            #     'auth': str(request.auth),
+            # }
+            print(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html'))
             try:
                 with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
                     return HttpResponse(f.read())
