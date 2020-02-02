@@ -50,10 +50,6 @@ class FrontendAppView(View):
         return render(request, 'frontend/public/index.html', context)
 
     def get(self, request, format=None):
-            # content = {
-            #     'user': str(request.user), #django.contrib.auth.user instance
-            #     'auth': str(request.auth),
-            # }
             print(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html'))
             try:
                 with open(os.path.join(settings.REACT_APP_DIR, 'build', 'index.html')) as f:
