@@ -21,5 +21,6 @@ from userSearch.views import userSearch, FrontendAppView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('userSearch.urls')),
-    path('index', FrontendAppView.as_view())
+    path('index', FrontendAppView.as_view()),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

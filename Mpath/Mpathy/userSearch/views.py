@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -11,11 +13,12 @@ from  rest_framework.views import APIView
 
 from .models import User_Account, Supervisee
 
-from userSearch.models  import User_Account
-from userSearch.serializers  import UserSerializer
+from userSearch.models  import User_Account, Supervisee
+from userSearch.serializers  import *
 from rest_framework import generics
+from utils.twitter_helper import get_users
 
-
+import twitter
 import logging
 import urllib.request
 import os
@@ -69,3 +72,40 @@ class FrontendAppView(View):
 class UserListCreate(generics.ListCreateAPIView):
     queryset= User_Account.objects.all()
     serializer_class=UserSerializer
+
+class ListMatchedTwitterID(APIView):
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        user=request.user
+        content = {
+            'user': str(user),  # `django.contrib.auth.User` instance.
+            'auth': str(request.auth),  # None
+        }
+        try:
+            twitter_name = request.GET.get('twitter')
+            if user is not None:
+                login(request, user)
+                query_set = Supervisee.objects.filter(user=user, screen_name=twitter_name)
+                #print(query_set._meta.fields)
+                if query_set:
+                    ss = SuperviseeSerializer(query_set, many=True)
+                    query_result = ss.data
+                if not query_set:
+                    query_result = get_users(twitter_name)
+
+        except ObjectDoesNotExist:
+            return HttpResponse(
+                    status=501,
+                )
+        except KeyError as e:
+            print(e)
+            return HttpResponse("Key Error: {0} not found".format(e))
+
+
+        if query_result:
+            return Response(query_result)
+        else:
+            return Response({'detail': 'Not Found'})
