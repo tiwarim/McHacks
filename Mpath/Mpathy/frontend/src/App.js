@@ -1,66 +1,59 @@
 import React, { useState } from "react";
-import Welcome from "react-welcome-page";
 import { apiMethods } from "./components/twitterAPI/apis";
-import "./App.css";
+import WelcomePage from "./components/Welcome";
+import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import Header from "./components/Header";
 
-const welcomeConfig = {
-  //image: require('./image_path/mypic1.png),
-  text: "MPathy - we are here to help you with your kid",
-  imageAnimation: "flipInX",
-  textAnimation: "bounce",
-  backgroundColor: "#FF3354",
-  textcolor: "#002134"
-};
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { user: "", data: {} };
+    this.state = { user: "", data: {}, begin: false };
   }
-
-  getData = () => {
-    apiMethods.getTestDataNoParams().then(data => {
-      this.setState({ data });
-    });
-  };
 
   setUser = value => {
     this.setState({ user: value });
   };
 
+  begin = () => {
+    this.setState({ begin: true });
+  };
+
   renderUserSearch = () => {
     return (
       <div className="App">
-        <label>
-          <section>Please type the name of you kid here</section>
-          <input
-            type="text"
-            value={this.state.user}
-            onChange={e => {
-              this.setUser(e.target.value);
-            }}
-            placeholder="type name here..."
-          />
-        </label>
-        <button className="btn btn-primary"> Search</button>
-
+        <Header />
+        <Form className="form">
+          <FormGroup>
+            <Label for="exampleEmail">
+              Please start by typing you kids name
+            </Label>
+            <Input
+              type="text"
+              value={this.state.user}
+              onChange={e => {
+                this.setUser(e.target.value);
+              }}
+              placeholder="type name here..."
+            />
+          </FormGroup>
+        </Form>
+        <Button className="btn btn-primary"> Search</Button>
         <div>{this.state.user}</div>
-        <div>
-          <button className="btn btn-primary" onClick={this.getData}>
-            {" "}
-            get
-          </button>
-        </div>
-        <div>{JSON.stringify(this.state.data)}</div>
       </div>
     );
   };
   render() {
     return (
-      <React.Fragment>
-        {this.renderUserSearch()}
-        <Welcome loopduration={11000} data={[welcomeConfig]} />
-      </React.Fragment>
+      <div className="welcomeWrapper">
+        {this.state.begin ? (
+          this.renderUserSearch()
+        ) : (
+          <WelcomePage clicked={this.begin} />
+        )}
+      </div>
     );
   }
 }
