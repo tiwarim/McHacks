@@ -11,6 +11,11 @@ from  rest_framework.views import APIView
 
 from .models import User_Account, Supervisee
 
+from userSearch.models  import User_Account
+from userSearch.serializers  import UserSerializer
+from rest_framework import generics
+
+
 import logging
 import urllib.request
 import os
@@ -60,3 +65,7 @@ class FrontendAppView(View):
                     """,
                     status=501,
                 )
+
+class UserListCreate(generics.ListCreateAPIView):
+    queryset= User_Account.objects.all()
+    serializer_class=UserSerializer

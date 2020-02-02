@@ -5,7 +5,7 @@ import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import Header from "./components/Header";
 
 import "./App.css";
-//import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends React.PureComponent {
   constructor(props) {
