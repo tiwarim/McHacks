@@ -21,5 +21,6 @@ from userSearch.views import userSearch, FrontendAppView
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('index', userSearch),
-    path('index', FrontendAppView.as_view())
+    path('index', FrontendAppView.as_view()),
+    # path('index/<str:matching_pattern>', FrontendAppView.search_twitter, name='search')
 ]
