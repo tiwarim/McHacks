@@ -6,7 +6,7 @@ McHacks repo
 
 Arguments:
 
-* corpus (list[str]): training corpus of previous tweets, as a list of strings (text body)
+* corpus (list[str]): training corpus of previous tweets, as a list of strings, each string being a tweets text body
 * new_data (list[str]): new tweet text (list of one string)
 * vis (boolean): boolean to visualize 2D PCA projected scatterplot, defaults to False
 * c_num (list[int]): list of cluster numbers to try, defaults to just [2], best is to use [2, 3, 4]
